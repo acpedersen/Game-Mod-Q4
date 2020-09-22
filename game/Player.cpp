@@ -10064,6 +10064,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
  	int			damage;
  	int			armorSave;
  	int			knockback;
+	bool		singlePlayerKnockback, ignoreDamageScale;
  	idVec3		damage_from;
  	float		attackerPushScale;
 
@@ -10142,20 +10143,25 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 	//
 	// determine knockback
 	//
-	damageDef->dict.GetInt( "knockback", "0", knockback );
+	damageDef->dict.GetInt("knockback", "0", knockback);
+	damageDef->dict.GetBool("singlePlayerKnockback", "0", singlePlayerKnockback);
+	damageDef->dict.GetBool("ignoreOwnerDamageScaleKnockback", "0", ignoreDamageScale);
 	if( gameLocal.isMultiplayer && gameLocal.IsTeamGame() ) {
 		damageDef->dict.GetInt( "knockback_team", va( "%d", knockback ), knockback );
 	}
 
-	knockback *= damageScale;
+
+	if (!(attacker == this && ignoreDamageScale))
+		knockback *= damageScale;
 
 	if ( knockback != 0 && !fl.noknockback ) {
-		if ( !gameLocal.isMultiplayer && attacker == this ) {
+		if (!gameLocal.isMultiplayer && attacker == this && !singlePlayerKnockback) {
 			//In SP, no knockback from your own stuff
+			//Except from new rocket launcher stuff
 			knockback = 0;
 		} else {
 			if ( attacker != this ) {
-				attackerPushScale = 1.0f;	
+				attackerPushScale = 1.0f;
 			} else {
 				// since default attackerDamageScale is 0.5, default attackerPushScale should be 2
 				damageDef->dict.GetFloat( "attackerPushScale", "2", attackerPushScale );

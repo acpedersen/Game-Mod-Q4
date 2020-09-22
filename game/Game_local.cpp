@@ -5680,6 +5680,7 @@ Returns the number of actors damaged
 // abahr: changed to work with deathPush
 void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEntity *attacker, idEntity *ignoreDamage, idEntity *ignorePush, const char *damageDefName, float dmgPower, int* hitCount ) {
 	float		dist, damageScale, attackerDamageScale, attackerPushScale;
+	bool		pushAttacker;
 	idEntity*	ent = NULL;
 	idEntity*	lastEnt = NULL;
 	idClipModel* clipModel = NULL;
@@ -5699,6 +5700,8 @@ void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEnt
 	damageDef->GetInt( "radius", "50", radius );
 	damageDef->GetInt( "push", va( "%d", damage * 100 ), push );
 	damageDef->GetFloat( "attackerDamageScale", "0.5", attackerDamageScale );
+	damageDef->GetBool("pushAttacker", "0", pushAttacker);
+
 	if( gameLocal.isMultiplayer ) {
 		damageDef->GetFloat( "attackerPushScale", "2", attackerPushScale );
 	} else {
@@ -5766,10 +5769,8 @@ void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEnt
 			continue;
 		}
 		
-		if (ent == attacker)
-			RadiusPushClipModel(inflictor, origin, push*attackerPushScale, clipModel);
-		else
-			RadiusPushClipModel ( inflictor, origin, push, clipModel );
+		
+		RadiusPushClipModel ( inflictor, origin, push, clipModel );
 
 		// Only damage unique entities.  This works because we have a sorted list
 		if( lastEnt == ent ) {
