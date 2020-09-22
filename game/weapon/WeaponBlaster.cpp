@@ -31,7 +31,7 @@ private:
 	int					chargeDelay;
 	idVec2				chargeGlow;
 	bool				fireForced;
-	bool				fireHeld;
+	int					fireHeldTime;
 
 	stateResult_t		State_Raise				( const stateParms_t& parms );
 	stateResult_t		State_Lower				( const stateParms_t& parms );
@@ -202,7 +202,7 @@ void rvWeaponBlaster::Spawn ( void ) {
 	chargeTime   = SEC2MS ( spawnArgs.GetFloat ( "chargeTime" ) );
 	chargeDelay  = SEC2MS ( spawnArgs.GetFloat ( "chargeDelay" ) );
 
-	fireHeld			= false;
+	fireHeldTime		= 0;
 	fireForced			= false;
 			
 	Flashlight ( owner->IsFlashlightOn() );
@@ -218,7 +218,7 @@ void rvWeaponBlaster::Save ( idSaveGame *savefile ) const {
 	savefile->WriteInt ( chargeDelay );
 	savefile->WriteVec2 ( chargeGlow );
 	savefile->WriteBool ( fireForced );
-	savefile->WriteBool ( fireHeld);
+	savefile->WriteInt(fireHeldTime);
 }
 
 /*
@@ -231,7 +231,7 @@ void rvWeaponBlaster::Restore ( idRestoreGame *savefile ) {
 	savefile->ReadInt ( chargeDelay );
 	savefile->ReadVec2 ( chargeGlow );
 	savefile->ReadBool ( fireForced );
-	savefile->ReadBool(fireHeld);
+	savefile->ReadInt(fireHeldTime);
 }
 
 /*
@@ -392,13 +392,13 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 
 			//make sure the player isn't looking at a gui first
 			if( player && player->GuiActive() )	{
-				fireHeld = false;
+				fireHeldTime = 0;
 				SetState ( "Lower", 0 );
 				return SRESULT_DONE;
 			}
 
 			if( player && !player->CanFire() )	{
-				fireHeld = false;
+				fireHeldTime = 0;
 				SetState ( "Idle", 4 );
 				return SRESULT_DONE;
 			}
