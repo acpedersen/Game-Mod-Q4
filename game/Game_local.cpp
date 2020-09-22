@@ -5717,7 +5717,8 @@ void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEnt
 		qsort( clipModelList, numListedClipModels, sizeof(clipModelList[0]), SortClipModelsByEntity );
 	}
 
-	if ( inflictor ) {
+	if ( inflictor )
+	{
 		inflictor = inflictor->GetDamageEntity ( );
 	}
 	if ( attacker ) {
@@ -5765,7 +5766,10 @@ void idGameLocal::RadiusDamage( const idVec3 &origin, idEntity *inflictor, idEnt
 			continue;
 		}
 		
-		RadiusPushClipModel ( inflictor, origin, push, clipModel );
+		if (ent == attacker)
+			RadiusPushClipModel(inflictor, origin, push*attackerPushScale, clipModel);
+		else
+			RadiusPushClipModel ( inflictor, origin, push, clipModel );
 
 		// Only damage unique entities.  This works because we have a sorted list
 		if( lastEnt == ent ) {

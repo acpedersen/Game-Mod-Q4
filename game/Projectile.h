@@ -262,6 +262,18 @@ ID_INLINE void idGuidedProjectile::CancelGuide ( void ) {
 /*
 ===============================================================================
 
+idRocketJumpProjectile
+
+===============================================================================
+*/
+
+class idRocketJumpProjectile : public idProjectile {
+public:
+	CLASS_PROTOTYPE(idRocketJumpProjectile);
+};
+/*
+===============================================================================
+
 rvDriftingProjectile
 
 ===============================================================================

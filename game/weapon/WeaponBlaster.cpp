@@ -31,13 +31,11 @@ private:
 	int					chargeDelay;
 	idVec2				chargeGlow;
 	bool				fireForced;
-	int					fireHeldTime;
+	bool				fireHeld;
 
 	stateResult_t		State_Raise				( const stateParms_t& parms );
 	stateResult_t		State_Lower				( const stateParms_t& parms );
 	stateResult_t		State_Idle				( const stateParms_t& parms );
-	stateResult_t		State_Charge			( const stateParms_t& parms );
-	stateResult_t		State_Charged			( const stateParms_t& parms );
 	stateResult_t		State_Fire				( const stateParms_t& parms );
 	stateResult_t		State_Flashlight		( const stateParms_t& parms );
 	
@@ -139,6 +137,57 @@ bool rvWeaponBlaster::UpdateAttack ( void ) {
 	
 	return false;
 }
+//Old version in case its needed
+/*bool rvWeaponBlaster::UpdateAttack(void) {
+	// Clear fire forced
+	if (fireForced) {
+		if (!wsfl.attack) {
+			fireForced = false;
+		}
+		else {
+			return false;
+		}
+	}
+
+	// If the player is pressing the fire button and they have enough ammo for a shot
+	// then start the shooting process.
+	if (wsfl.attack && gameLocal.time >= nextAttackTime) {
+		// Save the time which the fire button was pressed
+		if (fireHeldTime == 0) {
+			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+			fireHeldTime = gameLocal.time;
+			viewModel->SetShaderParm(BLASTER_SPARM_CHARGEGLOW, chargeGlow[0]);
+		}
+	}
+
+	// If they have the charge mod and they have overcome the initial charge 
+	// delay then transition to the charge state.
+	if (fireHeldTime != 0) {
+		if (gameLocal.time - fireHeldTime > chargeDelay) {
+			SetState("Charge", 4);
+			return true;
+		}
+
+		// If the fire button was let go but was pressed at one point then 
+		// release the shot.
+		if (!wsfl.attack) {
+			idPlayer * player = gameLocal.GetLocalPlayer();
+			if (player)	{
+
+				if (player->GuiActive())	{
+					//make sure the player isn't looking at a gui first
+					SetState("Lower", 0);
+				}
+				else {
+					SetState("Fire", 0);
+				}
+			}
+			return true;
+		}
+	}
+
+	return false;
+}*/
 
 /*
 ================
@@ -153,7 +202,7 @@ void rvWeaponBlaster::Spawn ( void ) {
 	chargeTime   = SEC2MS ( spawnArgs.GetFloat ( "chargeTime" ) );
 	chargeDelay  = SEC2MS ( spawnArgs.GetFloat ( "chargeDelay" ) );
 
-	fireHeldTime		= 0;
+	fireHeld			= false;
 	fireForced			= false;
 			
 	Flashlight ( owner->IsFlashlightOn() );
@@ -169,7 +218,7 @@ void rvWeaponBlaster::Save ( idSaveGame *savefile ) const {
 	savefile->WriteInt ( chargeDelay );
 	savefile->WriteVec2 ( chargeGlow );
 	savefile->WriteBool ( fireForced );
-	savefile->WriteInt ( fireHeldTime );
+	savefile->WriteBool ( fireHeld);
 }
 
 /*
@@ -182,7 +231,7 @@ void rvWeaponBlaster::Restore ( idRestoreGame *savefile ) {
 	savefile->ReadInt ( chargeDelay );
 	savefile->ReadVec2 ( chargeGlow );
 	savefile->ReadBool ( fireForced );
-	savefile->ReadInt ( fireHeldTime );
+	savefile->ReadBool(fireHeld);
 }
 
 /*
@@ -221,8 +270,6 @@ CLASS_STATES_DECLARATION ( rvWeaponBlaster )
 	STATE ( "Raise",						rvWeaponBlaster::State_Raise )
 	STATE ( "Lower",						rvWeaponBlaster::State_Lower )
 	STATE ( "Idle",							rvWeaponBlaster::State_Idle)
-	STATE ( "Charge",						rvWeaponBlaster::State_Charge )
-	STATE ( "Charged",						rvWeaponBlaster::State_Charged )
 	STATE ( "Fire",							rvWeaponBlaster::State_Fire )
 	STATE ( "Flashlight",					rvWeaponBlaster::State_Flashlight )
 END_CLASS_STATES
@@ -326,74 +373,6 @@ stateResult_t rvWeaponBlaster::State_Idle ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponBlaster::State_Charge
-================
-*/
-stateResult_t rvWeaponBlaster::State_Charge ( const stateParms_t& parms ) {
-	enum {
-		CHARGE_INIT,
-		CHARGE_WAIT,
-	};	
-	switch ( parms.stage ) {
-		case CHARGE_INIT:
-			viewModel->SetShaderParm ( BLASTER_SPARM_CHARGEGLOW, chargeGlow[0] );
-			StartSound ( "snd_charge", SND_CHANNEL_ITEM, 0, false, NULL );
-			PlayCycle( ANIMCHANNEL_ALL, "charging", parms.blendFrames );
-			return SRESULT_STAGE ( CHARGE_WAIT );
-			
-		case CHARGE_WAIT:	
-			if ( gameLocal.time - fireHeldTime < chargeTime ) {
-				float f;
-				f = (float)(gameLocal.time - fireHeldTime) / (float)chargeTime;
-				f = chargeGlow[0] + f * (chargeGlow[1] - chargeGlow[0]);
-				f = idMath::ClampFloat ( chargeGlow[0], chargeGlow[1], f );
-				viewModel->SetShaderParm ( BLASTER_SPARM_CHARGEGLOW, f );
-				
-				if ( !wsfl.attack ) {
-					SetState ( "Fire", 0 );
-					return SRESULT_DONE;
-				}
-				
-				return SRESULT_WAIT;
-			} 
-			SetState ( "Charged", 4 );
-			return SRESULT_DONE;
-	}
-	return SRESULT_ERROR;	
-}
-
-/*
-================
-rvWeaponBlaster::State_Charged
-================
-*/
-stateResult_t rvWeaponBlaster::State_Charged ( const stateParms_t& parms ) {
-	enum {
-		CHARGED_INIT,
-		CHARGED_WAIT,
-	};	
-	switch ( parms.stage ) {
-		case CHARGED_INIT:		
-			viewModel->SetShaderParm ( BLASTER_SPARM_CHARGEGLOW, 1.0f  );
-
-			StopSound ( SND_CHANNEL_ITEM, false );
-			StartSound ( "snd_charge_loop", SND_CHANNEL_ITEM, 0, false, NULL );
-			StartSound ( "snd_charge_click", SND_CHANNEL_BODY, 0, false, NULL );
-			return SRESULT_STAGE(CHARGED_WAIT);
-			
-		case CHARGED_WAIT:
-			if ( !wsfl.attack ) {
-				fireForced = true;
-				SetState ( "Fire", 0 );
-				return SRESULT_DONE;
-			}
-			return SRESULT_WAIT;
-	}
-	return SRESULT_ERROR;
-}
-
-/*
-================
 rvWeaponBlaster::State_Fire
 ================
 */
@@ -413,29 +392,23 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 
 			//make sure the player isn't looking at a gui first
 			if( player && player->GuiActive() )	{
-				fireHeldTime = 0;
+				fireHeld = false;
 				SetState ( "Lower", 0 );
 				return SRESULT_DONE;
 			}
 
 			if( player && !player->CanFire() )	{
-				fireHeldTime = 0;
+				fireHeld = false;
 				SetState ( "Idle", 4 );
 				return SRESULT_DONE;
 			}
 
 
 	
-			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
-				Attack ( true, 1, spread, 0, 1.0f );
-				PlayEffect ( "fx_chargedflash", barrelJointView, false );
-				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
-			} else {
-				Attack ( false, 1, spread, 0, 1.0f );
-				PlayEffect ( "fx_normalflash", barrelJointView, false );
-				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
-			}
-			fireHeldTime = 0;
+			Attack ( false, 1, spread, 0, 1.0f );
+			PlayEffect ( "fx_normalflash", barrelJointView, false );
+			PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
+			//fireHeldTime = 0;
 			
 			return SRESULT_STAGE(FIRE_WAIT);
 		

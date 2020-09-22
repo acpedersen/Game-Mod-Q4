@@ -1800,6 +1800,19 @@ void idGuidedProjectile::Killed( idEntity *inflictor, idEntity *attacker, int da
 /*
 ===============================================================================
 
+	idRocketJumpProjectile
+
+===============================================================================
+*/
+
+
+CLASS_DECLARATION(idProjectile, idRocketJumpProjectile)
+END_CLASS
+
+
+/*
+===============================================================================
+
 	rvDriftingProjectile
 
 ===============================================================================
