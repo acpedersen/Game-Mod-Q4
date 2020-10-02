@@ -10151,13 +10151,14 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 	}
 
 
+	//Changed to allow for weapons to ignore damage scaling
 	if (!(attacker == this && ignoreDamageScale))
 		knockback *= damageScale;
 
 	if ( knockback != 0 && !fl.noknockback ) {
 		if (!gameLocal.isMultiplayer && attacker == this && !singlePlayerKnockback) {
 			//In SP, no knockback from your own stuff
-			//Except from new rocket launcher stuff
+			//Except from new rocket launcher mod
 			knockback = 0;
 		} else {
 			if ( attacker != this ) {
