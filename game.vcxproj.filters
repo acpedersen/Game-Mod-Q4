@@ -519,7 +519,7 @@
     <ClCompile Include="game\mp\stats\StatWindow.cpp">
       <Filter>Game\MP\Stats</Filter>
     </ClCompile>
-    <ClCompile Include="Card.cpp">
+    <ClCompile Include="game\Card.cpp">
       <Filter>Game\Cards</Filter>
     </ClCompile>
   </ItemGroup>
@@ -836,7 +836,7 @@
     <ClInclude Include="game\mp\stats\StatWindow.h">
       <Filter>Game\MP\Stats</Filter>
     </ClInclude>
-    <ClInclude Include="Card.h">
+    <ClInclude Include="game\Card.h">
       <Filter>Game\Cards</Filter>
     </ClInclude>
   </ItemGroup>

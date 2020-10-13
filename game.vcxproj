@@ -210,7 +210,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Card.cpp" />
     <ClCompile Include="game\Actor.cpp" />
     <ClCompile Include="game\AF.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugInline|Win32'">Create</PrecompiledHeader>
@@ -220,6 +219,7 @@
     <ClCompile Include="game\AFEntity.cpp" />
     <ClCompile Include="game\BrittleFracture.cpp" />
     <ClCompile Include="game\Camera.cpp" />
+    <ClCompile Include="game\Card.cpp" />
     <ClCompile Include="game\client\ClientAFEntity.cpp" />
     <ClCompile Include="game\Effect.cpp" />
     <ClCompile Include="game\Entity.cpp" />
@@ -376,12 +376,12 @@
     <ClCompile Include="game\mp\stats\StatWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Card.h" />
     <ClInclude Include="game\Actor.h" />
     <ClInclude Include="game\AF.h" />
     <ClInclude Include="game\AFEntity.h" />
     <ClInclude Include="game\BrittleFracture.h" />
     <ClInclude Include="game\Camera.h" />
+    <ClInclude Include="game\Card.h" />
     <ClInclude Include="game\client\ClientAFEntity.h" />
     <ClInclude Include="game\Effect.h" />
     <ClInclude Include="game\Entity.h" />
