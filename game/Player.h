@@ -1117,6 +1117,8 @@ private:
 	void					InitWeapon			( void );
 	// RAVEN END
 
+	void					PlayCard(Card card);
+
 	bool					IsLegsIdle						( bool crouching ) const;
 	
 	stateResult_t			State_Wait_Alive				( const stateParms_t& parms );

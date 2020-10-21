@@ -519,7 +519,10 @@
     <ClCompile Include="game\mp\stats\StatWindow.cpp">
       <Filter>Game\MP\Stats</Filter>
     </ClCompile>
-    <ClCompile Include="game\Card.cpp">
+    <ClCompile Include="game\Cards\CardDash.cpp">
+      <Filter>Game\Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="game\Cards\Card.cpp">
       <Filter>Game\Cards</Filter>
     </ClCompile>
   </ItemGroup>
@@ -836,7 +839,7 @@
     <ClInclude Include="game\mp\stats\StatWindow.h">
       <Filter>Game\MP\Stats</Filter>
     </ClInclude>
-    <ClInclude Include="game\Card.h">
+    <ClInclude Include="game\Cards\Card.h">
       <Filter>Game\Cards</Filter>
     </ClInclude>
   </ItemGroup>

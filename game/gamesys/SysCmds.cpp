@@ -230,6 +230,16 @@ void Cmd_Script_f( const idCmdArgs &args ) {
 	}
 }
 
+/*
+===================
+Cmd_Play_Card
+===================
+*/
+void Cmd_Play_Card(const idCmdArgs &args)
+{
+
+}
+
 // RAVEN BEGIN
 // jscott: exports for tracking memory
 /*
@@ -515,6 +525,11 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 	if (idStr::Icmp(name, "guard") == 0) {
 		player->GivePowerUp( POWERUP_GUARD, -1 );
 		return;
+	}
+
+	if (idStr::Cmpn(name, "card", 4) == 0)
+	{
+		//player->GiveCard(name);
 	}
 // RAVEN END
 
@@ -3223,6 +3238,10 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "setPMCVars",			Cmd_SetPMCVars_f,			CMD_FL_GAME,				"Resets player movement cvars" );
 
 	cmdSystem->AddCommand( "testClientModel",		Cmd_TestClientModel_f,		CMD_FL_GAME,				"" );
+
+// Added card commands
+	cmdSystem->AddCommand("play", Cmd_Play_Card, CMD_FL_GAME, "Play a card by the ID.");
+
 #ifndef _FINAL
 	cmdSystem->AddCommand( "clientOverflowReliable", Cmd_ClientOverflowReliable_f, CMD_FL_GAME,				"" );
 #endif
