@@ -3852,4 +3852,20 @@ void idActor::GuidedProjectileIncoming( idGuidedProjectile *projectile )
 		}
 	}
 }
+
+/*
+void idActor::PlayCard(Card *card)
+{
+
+}
+
+void idActor::GiveCard(Card *card)
+{
+
+}*/
+
+void idActor::GiveCard(idStr cardId)
+{
+
+}
 // RAVEN END

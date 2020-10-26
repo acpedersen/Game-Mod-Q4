@@ -1117,7 +1117,6 @@ private:
 	void					InitWeapon			( void );
 	// RAVEN END
 
-	void					PlayCard(Card card);
 
 	bool					IsLegsIdle						( bool crouching ) const;
 	

@@ -23,6 +23,9 @@
 #if !defined(__INSTANCE_H__)
 	#include "../Instance.h"
 #endif
+#if !defined(__GAME_CARD_H__)
+	#include "../Cards/Card.h"
+#endif
 // RAVEN END
 
 #ifdef _WIN32
@@ -237,7 +240,10 @@ Cmd_Play_Card
 */
 void Cmd_Play_Card(const idCmdArgs &args)
 {
-
+	idPlayer *player = gameLocal.GetLocalPlayer();
+	Card cardToPlay = Card::GetCard(args.Argv(1));
+	cardToPlay.Play(player);
+	
 }
 
 // RAVEN BEGIN
@@ -529,7 +535,7 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 
 	if (idStr::Cmpn(name, "card", 4) == 0)
 	{
-		//player->GiveCard(name);
+		player->GiveCard(name);
 	}
 // RAVEN END
 

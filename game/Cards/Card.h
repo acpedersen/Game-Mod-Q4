@@ -10,13 +10,15 @@ public:
 
 
 	// save games
-	void					Save(idSaveGame *savefile) const;					// archives object for save game file
-	void					Restore(idRestoreGame *savefile);					// unarchives object from save game file
+	//void					Save(idSaveGame *savefile) const;					// archives object for save game file
+	//void					Restore(idRestoreGame *savefile);					// unarchives object from save game file
 
-	void					Play(idActor *actor);
+	void					Play(idActor *act);
+	static Card				GetCard(idStr cardId);
 
-private:
+protected:
 	idStr cardName;
+	const idDeclEntityDef* cardDef;
 	idStr displayName;
 	
 };

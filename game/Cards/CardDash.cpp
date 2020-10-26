@@ -3,26 +3,31 @@
 
 #include "Card.h"
 
+
 class CardDash : public Card
 {
 public:
 	CardDash();
 	virtual ~CardDash();
-	virtual void Play(idActor *actor);
+	void Play(idActor *act);
 };
 
 CardDash::CardDash()
 {
+	cardName = "card_dash";
 
 }
 CardDash::~CardDash()
 {
-	Card::~Card();
+
 }
 
-void CardDash::Play(idActor *actor)
+void CardDash::Play(idActor *act)
 {
-	Card::Play(actor);
+	Card::Play(act);
 
-	actor->ApplyImpulse();
+	idVec3 impulse = act->GetPhysics()->GetOrigin() * 5;
+	//act->
+
+	act->ApplyImpulse(act, 0, act->GetPhysics()->GetOrigin(), impulse);
 }

@@ -17,7 +17,6 @@
 #include "ai/AAS_tactical.h"
 #include "Healing_Station.h"
 #include "ai/AI_Medic.h"
-#include "Cards/Card.h"
 
 // RAVEN BEGIN
 // nrausch: support for turning the weapon change ui on and off

@@ -243,6 +243,11 @@ public:
 	
 	virtual void			SpawnGibs( const idVec3 &dir, const char *damageDefName );
 
+
+	//void					PlayCard(Card card);
+	//void					GiveCard(Card card);
+	void					GiveCard(idStr cardId);
+
 // RAVEN BEGIN
 // bdube: added for vehicle
 	bool					IsInVehicle ( void ) const;
@@ -259,6 +264,7 @@ public:
 	int						lightningEffects;
 
 protected:
+	//idList<Card>			deck;
 	friend class			idAnimState;
 
 	float					fovDot;				// cos( fovDegrees )
