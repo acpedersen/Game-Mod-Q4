@@ -3855,48 +3855,9 @@ void idActor::GuidedProjectileIncoming( idGuidedProjectile *projectile )
 	}
 }
 
-bool idActor::ReshuffleDiscard()
+void idActor::PlayFromDeck()
 {
-	deck.Append(discard);
-	discard.Clear();
-
-	//Actually shuffles it by going through the list and randomly putting the cards in a different order
-	for (int i = 0; i < deck.Size(); i++)
-	{
-		Card temp = deck[i];
-		deck.RemoveIndex(i);
-		deck.Insert(temp, rand() % deck.Size());
-	}
-
-	return true;
-}
-
-bool idActor::PlayCardFromDeck()
-{
-	int cardIndex = rand() % deck.Size();
-	PlayCard(deck[cardIndex]);
-
-	return true;
-}
-
-bool idActor::PlayCardFromHand()
-{
-	//Need to be able to select the card index somehow
-	Card card = hand[rand() % hand.Size()];
-	PlayCard(card);
-	hand.Remove(card);
-	discard.StackAdd(card);
-
-	return true;
-}
-
-void idActor::DrawCard()
-{
-	if (deck.Size() == 0)
-		ReshuffleDiscard();
-
-	hand.StackAdd(deck.StackTop());
-	deck.StackPop();
+	PlayCard(fullDeck[rand() % fullDeck.Size()]);
 }
 
 void idActor::PlayCard(Card card)
@@ -3904,10 +3865,9 @@ void idActor::PlayCard(Card card)
 	card.Play(*this);
 }
 
-
 void idActor::GiveCard(Card card)
 {
-	deck.StackAdd(card);
+	fullDeck.StackAdd(card);
 }
 
 void idActor::GiveCard(idStr cardId)

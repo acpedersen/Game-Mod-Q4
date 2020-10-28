@@ -491,7 +491,8 @@ void idInventory::Restore( idRestoreGame *savefile ) {
 		savefile->ReadInt( weaponMods[i] );
 	}
 
-	for( i = 0; i < POWERUP_MAX; i++ ) {
+	for( i = 0; i < POWERUP_MAX; i++ )
+	{
 		savefile->ReadInt( powerupEndTime[ i ] );
 	}
 

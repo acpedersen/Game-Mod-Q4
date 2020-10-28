@@ -17,6 +17,7 @@
 #include "ai/AAS_tactical.h"
 #include "Healing_Station.h"
 #include "ai/AI_Medic.h"
+#include "Cards/Card.h"
 
 // RAVEN BEGIN
 // nrausch: support for turning the weapon change ui on and off
@@ -3553,6 +3554,10 @@ void idPlayer::UpdateHudWeapon( int displayWeapon ) {
 #endif
 }
 
+void idPlayer::UpdateHudCards()
+{
+
+}
 /*
 ===============
 idPlayer::StartRadioChatter
@@ -5382,7 +5387,8 @@ idPlayer::SlotForWeapon
 int idPlayer::SlotForWeapon( const char *weaponName ) {
 	int i;
 
-	for( i = 0; i < MAX_WEAPONS; i++ ) {
+	for( i = 0; i < MAX_WEAPONS; i++ )
+	{
 		const char *weap = spawnArgs.GetString( va( "def_weapon%d", i ) );
 		if ( !idStr::Cmp( weap, weaponName ) ) {
 			return i;
@@ -14072,6 +14078,66 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 	}
 
 	return weaponNum;
+}
+
+
+
+bool idPlayer::PlayCardFromDeck()
+{
+	int cardIndex = rand() % inventory.deck.Size();
+	PlayCard(inventory.deck[cardIndex]);
+
+	return true;
+}
+
+bool idPlayer::PlayCardFromHand()
+{
+	//Need to be able to select the card index somehow
+	Card card = inventory.hand[rand() % inventory.hand.Size()];
+	PlayCard(card);
+	inventory.hand.Remove(card);
+	inventory.discard.StackAdd(card);
+
+	return true;
+}
+
+bool idInventory::ReshuffleDiscard()
+{
+	deck.Append(discard);
+	discard.Clear();
+
+	//Actually shuffles it by going through the list and randomly putting the cards in a different order
+	for (int i = 0; i < deck.Size(); i++)
+	{
+		Card temp = deck[i];
+		deck.RemoveIndex(i);
+		deck.Insert(temp, rand() % deck.Size());
+	}
+
+	return true;
+}
+
+void idInventory::ClearHand()
+{
+	discard.Append(hand);
+	hand.Clear();
+}
+
+void idInventory::DrawHand()
+{
+	for (int i = 0; i < handSize; i++)
+	{
+		DrawCard();
+	}
+}
+
+void idInventory::DrawCard()
+{
+	if (deck.Size() == 0)
+		ReshuffleDiscard();
+
+	hand.StackAdd(deck.StackTop());
+	deck.StackPop();
 }
 
 // RITUAL END

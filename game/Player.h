@@ -257,6 +257,12 @@ public:
 	bool					UseAmmo( int index, int amount );
 	int						HasAmmo( const char *weapon_classname );			// looks up the ammo information for the weapon class first
 
+
+	bool					ReshuffleDiscard();
+	void					ClearHand();
+	void					DrawCard();
+	void					DrawHand();
+
 	int						nextItemPickup;
 	int						nextItemNum;
 	int						onePickupTime;
@@ -265,6 +271,12 @@ public:
 //	idList<rvDatabaseEntry>	database;
 	
 	int						secretAreasDiscovered;
+
+
+	int						handSize = 1;
+	idList<Card>			deck;
+	idList<Card>			hand;
+	idList<Card>			discard;
 };
 
 class idPlayer : public idActor {
@@ -639,6 +651,7 @@ public:
 #ifdef _XENON
 	void					ResetHUDWeaponSwitch( void );
 #endif
+	void					UpdateHudCards();
 	void					UpdateHudStats( idUserInterface *hud );
  	void					UpdateHudAmmo( idUserInterface *hud );
  	void					ShowTip( const char *title, const char *tip, bool autoHide );
@@ -794,6 +807,9 @@ public:
 	void					ClampCash( float minCash, float maxCash );
 	void					SetCash( float newCashAmount );
 	void					ResetCash();
+
+	bool					PlayCardFromDeck();
+	bool					PlayCardFromHand();
 // RITUAL END
 
 protected:
@@ -1156,6 +1172,8 @@ private:
 	stateResult_t			State_Legs_Dead					( const stateParms_t& parms );
 	
  	CLASS_STATES_PROTOTYPE( idPlayer );
+
+	int						DrawTime;
 };
 
 ID_INLINE bool idPlayer::IsBeingTalkedTo( void ) {

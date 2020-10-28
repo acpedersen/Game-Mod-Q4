@@ -24,6 +24,9 @@ CardDash::~CardDash()
 
 void CardDash::Play(idActor act)
 {
+	if (!CanPlay(act)) //Check if the card can be played
+		return;
+
 	Card::Play(act);
 
 	idVec3 impulse = act.GetPhysics()->GetOrigin() * 5;

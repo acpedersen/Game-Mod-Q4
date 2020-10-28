@@ -243,6 +243,7 @@ void idSaveGame::WriteString( const char *string ) {
 	file->WriteString( string );
 }
 
+
 /*
 ================
 idSaveGame::WriteVec2
@@ -976,6 +977,11 @@ void idSaveGame::WriteBuildNumber( const int value ) {
 }
 
 
+void idSaveGame::WriteCardArray(const int cards[])
+{
+	
+	//file->WriteNumericStructArray(cards);
+}
 
 
 

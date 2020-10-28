@@ -246,10 +246,7 @@ public:
 	virtual void			SpawnGibs( const idVec3 &dir, const char *damageDefName );
 
 
-	bool					ReshuffleDiscard();
-	bool					PlayCardFromDeck();
-	bool					PlayCardFromHand();
-	void					DrawCard();
+	void					PlayFromDeck();
 	void					PlayCard(Card card);
 	void					GiveCard(Card card);
 	void					GiveCard(idStr cardId);
@@ -271,9 +268,6 @@ public:
 
 protected:
 	idList<Card>			fullDeck;
-	idList<Card>			deck;
-	idList<Card>			hand;
-	idList<Card>			discard;
 	friend class			idAnimState;
 
 	float					fovDot;				// cos( fovDegrees )

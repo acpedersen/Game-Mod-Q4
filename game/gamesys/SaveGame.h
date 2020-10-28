@@ -44,7 +44,8 @@ public:
 	void					WriteStaticObject( const idClass &obj );
 	void					WriteDict( const idDict *dict );
 	void					WriteMaterial( const idMaterial *material );
-	void					WriteSkin( const idDeclSkin *skin );
+	void					WriteSkin(const idDeclSkin *skin);
+	void					WriteCardArray(const int cards[]);
 // RAVEN BEGIN
 // jscott: not using
 //	void					WriteParticle( const idDeclParticle *particle );

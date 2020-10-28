@@ -21,6 +21,7 @@ public:
 		if (idStr::Icmp(cardId, "card_dash"))
 		{
 			
+
 			Card *card = new Card();
 			return *card;
 		}
@@ -29,11 +30,14 @@ public:
 		Card *card = new Card();
 		return *card;
 	}
+	bool				CanPlay(idActor act);
 
 protected:
 	idStr cardName;
 	const idDeclEntityDef* cardDef;
 	idStr displayName;
+
+	bool playerOnly = false;
 	
 };
 

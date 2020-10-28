@@ -10,16 +10,24 @@
 Card::Card()
 {
 	cardDef = gameLocal.FindEntityDef(cardName);
+	playerOnly = cardDef->dict.GetBool("PlayerOnly");
 }
 
 Card::~Card()
 {
-
+	delete cardName;
+	delete cardDef;
+	delete displayName;
 }
 
 void Card::Play(idActor act)
 {
+	
+}
 
+bool Card::CanPlay(idActor act)
+{
+	return playerOnly && gameLocal.GetLocalPlayer()->GetInstance() != act.GetInstance();
 }
 
 bool Card::operator==(const Card card)
