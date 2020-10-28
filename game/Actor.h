@@ -58,6 +58,8 @@ extern const idEventDef	AI_JumpDown;
 extern const idEventDef AI_SetLeader;
 // RAVEN END
 
+class Card;
+
 class idAnimState {
 public:
 
@@ -244,8 +246,12 @@ public:
 	virtual void			SpawnGibs( const idVec3 &dir, const char *damageDefName );
 
 
-	//void					PlayCard(Card card);
-	//void					GiveCard(Card card);
+	bool					ReshuffleDiscard();
+	bool					PlayCardFromDeck();
+	bool					PlayCardFromHand();
+	void					DrawCard();
+	void					PlayCard(Card card);
+	void					GiveCard(Card card);
 	void					GiveCard(idStr cardId);
 
 // RAVEN BEGIN
@@ -264,7 +270,10 @@ public:
 	int						lightningEffects;
 
 protected:
-	//idList<Card>			deck;
+	idList<Card>			fullDeck;
+	idList<Card>			deck;
+	idList<Card>			hand;
+	idList<Card>			discard;
 	friend class			idAnimState;
 
 	float					fovDot;				// cos( fovDegrees )

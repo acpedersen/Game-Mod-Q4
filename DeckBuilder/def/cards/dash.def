@@ -1,0 +1,8 @@
+entityDef card_dash
+{
+	"cardname"	"Dash"
+	"displayname"	"Dash"
+	"description_text"	"Moves a set distance in the direction faced."
+
+
+}

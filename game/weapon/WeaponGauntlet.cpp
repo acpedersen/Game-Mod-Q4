@@ -4,7 +4,8 @@
 #include "../Game_local.h"
 #include "../Weapon.h"
 
-class rvWeaponGauntlet : public rvWeapon {
+class rvWeaponGauntlet : public rvWeapon
+{
 public:
 
 	CLASS_PROTOTYPE( rvWeaponGauntlet );

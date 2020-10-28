@@ -242,7 +242,7 @@ void Cmd_Play_Card(const idCmdArgs &args)
 {
 	idPlayer *player = gameLocal.GetLocalPlayer();
 	Card cardToPlay = Card::GetCard(args.Argv(1));
-	cardToPlay.Play(player);
+	cardToPlay.Play(*player);
 	
 }
 

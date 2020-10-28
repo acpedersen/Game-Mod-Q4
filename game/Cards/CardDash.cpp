@@ -9,7 +9,7 @@ class CardDash : public Card
 public:
 	CardDash();
 	virtual ~CardDash();
-	void Play(idActor *act);
+	virtual void Play(idActor act);
 };
 
 CardDash::CardDash()
@@ -22,12 +22,12 @@ CardDash::~CardDash()
 
 }
 
-void CardDash::Play(idActor *act)
+void CardDash::Play(idActor act)
 {
 	Card::Play(act);
 
-	idVec3 impulse = act->GetPhysics()->GetOrigin() * 5;
+	idVec3 impulse = act.GetPhysics()->GetOrigin() * 5;
 	//act->
 
-	act->ApplyImpulse(act, 0, act->GetPhysics()->GetOrigin(), impulse);
+	act.ApplyImpulse(&act, 0, act.GetPhysics()->GetOrigin(), impulse);
 }

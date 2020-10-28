@@ -5,13 +5,11 @@
 
 #include "Card.h"
 
-
 #include "../Game_local.h"
 
 Card::Card()
 {
 	cardDef = gameLocal.FindEntityDef(cardName);
-
 }
 
 Card::~Card()
@@ -19,12 +17,12 @@ Card::~Card()
 
 }
 
-void Card::Play(idActor *act)
+void Card::Play(idActor act)
 {
 
 }
 
-Card Card::GetCard(idStr cardId)
+bool Card::operator==(const Card card)
 {
-
+	return this->cardName == card.cardName;
 }
