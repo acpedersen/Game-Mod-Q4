@@ -2053,6 +2053,8 @@ void idPlayer::Spawn( void ) {
 //RITUAL END
 
 	itemCosts = static_cast< const idDeclEntityDef * >( declManager->FindType( DECL_ENTITYDEF, "ItemCostConstants", false ) );
+
+	ResetDecks();
 }
 
 /*
@@ -3554,10 +3556,6 @@ void idPlayer::UpdateHudWeapon( int displayWeapon ) {
 #endif
 }
 
-void idPlayer::UpdateHudCards()
-{
-
-}
 /*
 ===============
 idPlayer::StartRadioChatter
@@ -3738,6 +3736,8 @@ void idPlayer::DrawHUD( idUserInterface *_hud ) {
 		}	
 
 		UpdateHudStats( _hud );
+
+		UpdateHudCards();
 
 		if ( focusBrackets ) {
 			// If 2d_calc is still true then the gui didnt render so we can abandon it
@@ -14082,36 +14082,44 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 
 
 
-bool idPlayer::PlayCardFromDeck()
+bool idPlayer::PlayRandomCardFromDeck()
 {
-	int cardIndex = rand() % inventory.deck.Size();
-	PlayCard(inventory.deck[cardIndex]);
+	int cardIndex = rand() % inventory.deck->Num();
+	PlayCard((*inventory.deck)[cardIndex]);
 
 	return true;
 }
 
-bool idPlayer::PlayCardFromHand()
+bool idPlayer::PlaySelectedCardFromHand()
 {
 	//Need to be able to select the card index somehow
-	Card card = inventory.hand[rand() % inventory.hand.Size()];
+	Card card = (*inventory.hand)[inventory.selectedHandCard];
 	PlayCard(card);
-	inventory.hand.Remove(card);
-	inventory.discard.StackAdd(card);
+	inventory.hand->Remove(card);
+	inventory.discard->StackAdd(card);
+
+	if (inventory.selectedHandCard > 0)
+		inventory.selectedHandCard--;
+
+	UpdateHud();
 
 	return true;
 }
 
 bool idInventory::ReshuffleDiscard()
 {
-	deck.Append(discard);
-	discard.Clear();
+	deck->Append(*discard);
+	discard->Clear();
+
+	if (deck->Num() == 0)
+		return false;
 
 	//Actually shuffles it by going through the list and randomly putting the cards in a different order
-	for (int i = 0; i < deck.Size(); i++)
+	for (int i = 0; i < deck->Num(); i++)
 	{
-		Card temp = deck[i];
-		deck.RemoveIndex(i);
-		deck.Insert(temp, rand() % deck.Size());
+		Card temp = (*deck)[i];
+		deck->RemoveIndex(i);
+		deck->Insert(temp, rand() % deck->Num());
 	}
 
 	return true;
@@ -14119,25 +14127,75 @@ bool idInventory::ReshuffleDiscard()
 
 void idInventory::ClearHand()
 {
-	discard.Append(hand);
-	hand.Clear();
+	discard->Append(*hand);
+	hand->Clear();
 }
 
 void idInventory::DrawHand()
 {
-	for (int i = 0; i < handSize; i++)
+	for (int i = 0; i < maxHandSize; i++)
 	{
 		DrawCard();
 	}
+
+	lastHandDraw = gameLocal.time;
 }
 
 void idInventory::DrawCard()
 {
-	if (deck.Size() == 0)
-		ReshuffleDiscard();
+	if (deck->Num() == 0)
+		if (!ReshuffleDiscard())
+			return;
 
-	hand.StackAdd(deck.StackTop());
-	deck.StackPop();
+	hand->StackAdd(deck->StackTop());
+	deck->StackPop();
 }
 
+void idPlayer::UpdateHudCards()
+{
+	hud->SetStateInt("selected_card", inventory.selectedHandCard + 1);
+	hud->SetStateInt("draw_time", inventory.handDrawTime - (gameLocal.time - inventory.lastHandDraw));
+
+	for (int i = 0; i < inventory.maxHandSize && i < inventory.hand->Num(); i++)
+	{
+		hud->SetStateString("card" + (i + 1), (*inventory.hand)[i].GetDisplayName());
+	}
+
+	hud->HandleNamedEvent("updateCardHud");
+}
+
+void idPlayer::NextSelectedCard()
+{
+	inventory.selectedHandCard += 1;
+	if (inventory.selectedHandCard >= inventory.hand->Num())
+		inventory.selectedHandCard = 0;
+
+	UpdateHudCards();
+
+}
+void idPlayer::PreviousSelectedCard()
+{
+	inventory.selectedHandCard -= 1;
+	if (inventory.selectedHandCard < 0)
+		inventory.selectedHandCard = inventory.hand->Num() - 1;
+
+	UpdateHudCards();
+}
+
+void idPlayer::ResetDecks(bool updateHud)
+{
+	inventory.deck->Clear();
+	inventory.hand->Clear();
+	inventory.discard->Clear();
+
+	inventory.selectedHandCard = 0;
+
+	inventory.deck->Append(fullDeck);
+	inventory.ReshuffleDiscard();
+	inventory.DrawHand();
+
+	if (updateHud)
+		UpdateHudCards();
+
+}
 // RITUAL END

@@ -3857,7 +3857,7 @@ void idActor::GuidedProjectileIncoming( idGuidedProjectile *projectile )
 
 void idActor::PlayFromDeck()
 {
-	PlayCard(fullDeck[rand() % fullDeck.Size()]);
+	PlayCard(fullDeck[rand() % fullDeck.Num()]);
 }
 
 void idActor::PlayCard(Card card)

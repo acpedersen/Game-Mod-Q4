@@ -6,7 +6,10 @@ class idActor;
 class Card : public idClass
 {
 public:
-	Card();
+	CLASS_PROTOTYPE(Card);
+
+	Card() {};
+	Card(idStr cardName);
 	virtual ~Card();
 
 
@@ -16,29 +19,26 @@ public:
 
 	virtual void			Play(idActor act);
 	bool					operator==(const Card card);
-	static Card				GetCard(idStr cardId)
-	{
-		if (idStr::Icmp(cardId, "card_dash"))
-		{
-			
-
-			Card *card = new Card();
-			return *card;
-		}
+	bool					CanPlay(idActor act);
 
 
-		Card *card = new Card();
-		return *card;
-	}
-	bool				CanPlay(idActor act);
+	//Inline Functions
+	inline idStr			GetDisplayName() { return displayName; }
+
+
+	//Static Functions
+	static Card				GetCard(idStr cardId);
+	
 
 protected:
-	idStr cardName;
 	const idDeclEntityDef* cardDef;
+	idStr cardName;
 	idStr displayName;
+	idStr descriptionText;
 
 	bool playerOnly = false;
-	
+
 };
+
 
 #endif

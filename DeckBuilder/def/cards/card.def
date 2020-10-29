@@ -1,0 +1,78 @@
+entityDef card_dash
+{
+	"displayname"	"Dash"
+	"description_text"	"Moves a set distance in the direction faced."
+
+	//"player_only" "1"
+	"impulse" "5"
+}
+
+entityDef card_weapon_swap
+{
+	"displayname"	"Weapon Swap"
+	"description_text"	"Swaps to a weapon."
+
+	"player_only" "1"
+}
+
+entityDef card_grenade
+{
+	"displayname"	"Grenade"
+	"description_text"	"Throws a grenade."
+
+	"player_only" "1"
+}
+
+entityDef card_impulse
+{
+	"displayname"	"Impulse"
+	"description_text"	"Pushes enemies away from the player."
+
+	//"player_only" "1"
+	"impulse" "1"
+}
+
+entityDef card_quad_damage
+{
+	"displayname"	"Quad Damage"
+	"description_text"	"Activates the Quad Damage buff for a set duration."
+
+	"player_only" "1"
+	"duration" "4"
+}
+
+entityDef card_speed_buff
+{
+	"displayname"	"Speed Buff"
+	"description_text"	"Activates the speed buff for a set duration."
+
+	"player_only" "1"
+	"duration" "6"
+}
+
+entityDef card_invisibility
+{
+	"displayname"	"Invisibility"
+	"description_text"	"Become invisible for a set amount of time."
+
+	"player_only" "1"
+	"duration" "7"
+}
+
+entityDef card_heal
+{
+	"displayname"	"Dash"
+	"description_text"	"Heals the player for a set amount of health."
+
+	"player_only" "1"
+	"health"	"10"
+}
+
+entityDef card_ammo_up
+{
+	"displayname"	"Ammo Up"
+	"description_text"	"Replenishes the current weapons ammo."
+
+	"player_only" "1"
+	"ammo_percentage" "1.0"
+}

@@ -273,10 +273,13 @@ public:
 	int						secretAreasDiscovered;
 
 
-	int						handSize = 1;
-	idList<Card>			deck;
-	idList<Card>			hand;
-	idList<Card>			discard;
+	int						lastHandDraw = 0;
+	int						handDrawTime = 10;
+	int						selectedHandCard = 0;
+	int						maxHandSize = 3;
+	idList<Card>			*deck = new idList<Card>();
+	idList<Card>			*hand = new idList<Card>();
+	idList<Card>			*discard = new idList<Card>();
 };
 
 class idPlayer : public idActor {
@@ -651,7 +654,7 @@ public:
 #ifdef _XENON
 	void					ResetHUDWeaponSwitch( void );
 #endif
-	void					UpdateHudCards();
+
 	void					UpdateHudStats( idUserInterface *hud );
  	void					UpdateHudAmmo( idUserInterface *hud );
  	void					ShowTip( const char *title, const char *tip, bool autoHide );
@@ -808,8 +811,8 @@ public:
 	void					SetCash( float newCashAmount );
 	void					ResetCash();
 
-	bool					PlayCardFromDeck();
-	bool					PlayCardFromHand();
+	bool					PlayRandomCardFromDeck();
+	bool					PlaySelectedCardFromHand();
 // RITUAL END
 
 protected:
@@ -1132,6 +1135,13 @@ private:
 	bool doInitWeapon;
 	void					InitWeapon			( void );
 	// RAVEN END
+
+
+	void					DrawCard();
+	void					UpdateHudCards();
+	void					NextSelectedCard();
+	void					PreviousSelectedCard();
+	void					ResetDecks(bool updateHud = false);
 
 
 	bool					IsLegsIdle						( bool crouching ) const;

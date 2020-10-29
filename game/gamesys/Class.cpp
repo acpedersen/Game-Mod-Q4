@@ -1423,9 +1423,19 @@ void idClass::RegisterClasses( void )
 	REGISTER(rvWeaponRailgun); // ..\..\code\game\weapon\WeaponRailgun.cpp
 	REGISTER(rvWeaponRocketLauncher); // ..\..\code\game\weapon\WeaponRocketLauncher.cpp
 	REGISTER(rvWeaponShotgun); // ..\..\code\game\weapon\WeaponShotgun.cpp
+	REGISTER(Card);
+	REGISTER(CardAmmoUp);
+	REGISTER(CardDash);
+	REGISTER(CardGrenade);
+	REGISTER(CardHeal);
+	REGISTER(CardImpulse);
+	REGISTER(CardInvisibility);
+	REGISTER(CardQuadDamage);
+	REGISTER(CardSpeedBuff);
 // RITUAL BEGIN
 	REGISTER(riDeadZonePowerup); // ..\..\code\game\Item.cpp
 	REGISTER(WeaponNapalmGun);	// ..\..\code\game\weapon\WeaponNapalmGun.cpp
+	REGISTER(CardWeaponSwap);
 // RITUAL END
 #undef REGISTER
 }
