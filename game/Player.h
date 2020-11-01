@@ -272,9 +272,9 @@ public:
 	
 	int						secretAreasDiscovered;
 
-
+	//in milliseconds
 	int						lastHandDraw = 0;
-	int						handDrawTime = 10;
+	int						handDrawTime;
 	int						selectedHandCard = 0;
 	int						maxHandSize = 3;
 	idList<Card>			*deck = new idList<Card>();
@@ -813,6 +813,15 @@ public:
 
 	bool					PlayRandomCardFromDeck();
 	bool					PlaySelectedCardFromHand();
+
+	void					DrawCard();
+	void					UpdateHudCards();
+	void					NextSelectedCard();
+	void					PreviousSelectedCard();
+	void					SelectCard(int index);
+	void					ResetDecks(bool updateHud = false);
+	void					DrawHand();
+	void					GiveCard(Card card);
 // RITUAL END
 
 protected:
@@ -1137,11 +1146,6 @@ private:
 	// RAVEN END
 
 
-	void					DrawCard();
-	void					UpdateHudCards();
-	void					NextSelectedCard();
-	void					PreviousSelectedCard();
-	void					ResetDecks(bool updateHud = false);
 
 
 	bool					IsLegsIdle						( bool crouching ) const;

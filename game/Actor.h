@@ -249,7 +249,8 @@ public:
 	void					PlayFromDeck();
 	void					PlayCard(Card card);
 	void					GiveCard(Card card);
-	void					GiveCard(idStr cardId);
+	void					GiveCardString(idStr cardId);
+	void					GiveCardString(const char *cardId);
 
 // RAVEN BEGIN
 // bdube: added for vehicle

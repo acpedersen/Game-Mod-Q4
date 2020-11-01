@@ -220,15 +220,6 @@
     <ClCompile Include="game\BrittleFracture.cpp" />
     <ClCompile Include="game\Camera.cpp" />
     <ClCompile Include="game\Cards\Card.cpp" />
-    <ClCompile Include="game\Cards\CardAmmoUp.cpp" />
-    <ClCompile Include="game\Cards\CardDash.cpp" />
-    <ClCompile Include="game\Cards\CardGrenade.cpp" />
-    <ClCompile Include="game\Cards\CardHeal.cpp" />
-    <ClCompile Include="game\Cards\CardImpulse.cpp" />
-    <ClCompile Include="game\Cards\CardInvisibility.cpp" />
-    <ClCompile Include="game\Cards\CardQuadDamage.cpp" />
-    <ClCompile Include="game\Cards\CardSpeedBuff.cpp" />
-    <ClCompile Include="game\Cards\CardWeaponSwap.cpp" />
     <ClCompile Include="game\client\ClientAFEntity.cpp" />
     <ClCompile Include="game\Effect.cpp" />
     <ClCompile Include="game\Entity.cpp" />

@@ -34,6 +34,10 @@
 #include "NoGameTypeInfo.h"
 #endif
 
+void Cmd_CodeTest1(const idCmdArgs &args)
+{
+
+}
 /*
 ==================
 Cmd_GetFloatArg
@@ -240,11 +244,45 @@ Cmd_Play_Card
 */
 void Cmd_Play_Card(const idCmdArgs &args)
 {
+	if (!Card::IsCard(args.Argv(1)))
+	{
+		gameLocal.Printf("%s is not a card name.\n", args.Argv(1));
+		return;
+	}
+
 	idPlayer *player = gameLocal.GetLocalPlayer();
-	Card cardToPlay = Card::GetCard(args.Argv(1));
-	cardToPlay.Play(*player);
+	Card *cardToPlay = new Card(args.Argv(1));
+	player->PlayCard(*cardToPlay);
+	gameLocal.Printf("Played card: %s\n", args.Argv(1));
 	
 }
+
+
+void Cmd_Draw_Hand(const idCmdArgs &args)
+{
+	idPlayer	*player;
+
+	player = gameLocal.GetLocalPlayer();
+	player->DrawHand();
+
+}
+
+void Cmd_Play_Selected(const idCmdArgs &args) {
+	idPlayer	*player;
+
+	player = gameLocal.GetLocalPlayer();
+	if (args.Argc() > 0)
+	{
+		int index = atoi(args.Argv(1));
+
+		player->SelectCard(index);
+	}
+	if (!player->PlaySelectedCardFromHand())
+	{
+		gameLocal.Printf("Could not play selected card.");
+	}
+}
+
 
 // RAVEN BEGIN
 // jscott: exports for tracking memory
@@ -474,6 +512,13 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 		}
 	}
 
+	if (idStr::Cmpn(name, "card_", 5) == 0 && Card::IsCard(name))
+	{
+		player->GiveCardString(name);
+		player->DrawHand();
+		return;
+	}
+
 	if ( give_all || idStr::Icmp( name, "ammo" ) == 0 ) {
 // RAVEN BEGIN
 // bdube: define changed
@@ -531,11 +576,6 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 	if (idStr::Icmp(name, "guard") == 0) {
 		player->GivePowerUp( POWERUP_GUARD, -1 );
 		return;
-	}
-
-	if (idStr::Cmpn(name, "card", 4) == 0)
-	{
-		player->GiveCard(name);
 	}
 // RAVEN END
 
@@ -3247,6 +3287,8 @@ void idGameLocal::InitConsoleCommands( void ) {
 
 // Added card commands
 	cmdSystem->AddCommand("play", Cmd_Play_Card, CMD_FL_GAME, "Play a card by the ID.");
+	cmdSystem->AddCommand("drawHand", Cmd_Draw_Hand, CMD_FL_GAME, "Force a hand draw.");
+	cmdSystem->AddCommand("playSelected", Cmd_Play_Selected, CMD_FL_GAME, "Play selected card");
 
 #ifndef _FINAL
 	cmdSystem->AddCommand( "clientOverflowReliable", Cmd_ClientOverflowReliable_f, CMD_FL_GAME,				"" );
@@ -3255,7 +3297,9 @@ void idGameLocal::InitConsoleCommands( void ) {
 // RITUAL START
 // squirrel: Mode-agnostic buymenus
 	cmdSystem->AddCommand( "buyMenu",				Cmd_ToggleBuyMenu_f,		CMD_FL_GAME,				"Toggle buy menu (if in a buy zone and the game type supports it)" );
-	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
+	cmdSystem->AddCommand("buy", Cmd_BuyItem_f, CMD_FL_GAME, "Buy an item (if in a buy zone and the game type supports it)");
+
+	cmdSystem->AddCommand("test1", Cmd_CodeTest1, CMD_FL_GAME, "");
 // RITUAL END
 
 }

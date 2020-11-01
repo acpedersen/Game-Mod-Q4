@@ -10,6 +10,8 @@
 #include "NoGameTypeInfo.h"
 #endif
 
+#include "../Cards/Card.h"
+
 /*
 Save game related helper classes.
 
@@ -977,12 +979,31 @@ void idSaveGame::WriteBuildNumber( const int value ) {
 }
 
 
-void idSaveGame::WriteCardArray(const int cards[])
+void idSaveGame::WriteStringArray(const idStr cards[])
 {
-	
-	//file->WriteNumericStructArray(cards);
+	idStr idStrArray = "";
+	for (int i = 0; i < cards->Size(); i++)
+	{
+		idStrArray += cards[i];
+		if (i != cards->Size()-1)
+			idStrArray += ";";
+	}
+
+	file->WriteString(idStrArray);
 }
 
+void idSaveGame::WriteStringArray(const idList<idStr> cards)
+{
+	idStr idStrArray = "";
+	for (int i = 0; i < cards.Size(); i++)
+	{
+		idStrArray += cards[i];
+		if (i != cards.Size() - 1)
+			idStrArray += ";";
+	}
+
+	file->WriteString(idStrArray);
+}
 
 
 
@@ -2077,6 +2098,15 @@ idRestoreGame::ReadBuildNumber
 */
 void idRestoreGame::ReadBuildNumber( void ) {
 	ReadInt( buildNumber );
+}
+
+void idRestoreGame::ReadStringArray(idList<idStr> &value)
+{
+	idStr idStrArray;
+	ReadString(idStrArray);
+
+	idStrArray.Split(value, ';', ';');
+
 }
 
 /*

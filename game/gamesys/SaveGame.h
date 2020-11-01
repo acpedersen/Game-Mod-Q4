@@ -45,7 +45,8 @@ public:
 	void					WriteDict( const idDict *dict );
 	void					WriteMaterial( const idMaterial *material );
 	void					WriteSkin(const idDeclSkin *skin);
-	void					WriteCardArray(const int cards[]);
+	void					WriteStringArray(const idStr cards[]);
+	void					WriteStringArray(const idList<idStr> cards);
 // RAVEN BEGIN
 // jscott: not using
 //	void					WriteParticle( const idDeclParticle *particle );
@@ -129,6 +130,7 @@ public:
 	void					ReadDict( idDict *dict );
 	void					ReadMaterial( const idMaterial *&material );
 	void					ReadSkin( const idDeclSkin *&skin );
+	void					ReadStringArray(idList<idStr> &value);
 // RAVEN BEGIN
 // bdube: not using
 //	void					ReadParticle( const idDeclParticle *&particle );
@@ -167,6 +169,8 @@ public:
 	void					ReadSoundCommands( void );
 
 	void					ReadBuildNumber( void );
+
+	
 
 	//						Used to retrieve the saved game buildNumber from within class Restore methods
 	int						GetBuildNumber( void );

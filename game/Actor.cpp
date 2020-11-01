@@ -887,6 +887,8 @@ void idActor::Save( idSaveGame *savefile ) const {
 	savefile->WriteInt( deathPushTime );
 	savefile->WriteVec3( deathPushForce );
 	savefile->WriteJoint( deathPushJoint );
+
+	//savefile->WriteStringArray(Card::GetStringsFromCards(fullDeck));
 }
 
 /*
@@ -1006,6 +1008,11 @@ void idActor::Restore( idRestoreGame *savefile ) {
 	savefile->ReadInt( deathPushTime );
 	savefile->ReadVec3( deathPushForce );
 	savefile->ReadJoint( deathPushJoint );
+
+	//Does this work?
+	//idList<idStr> *createdCardList = new idList<idStr>();
+	//savefile->ReadStringArray(*createdCardList);
+	//fullDeck = Card::GetCardsFromStrings(*createdCardList);
 
 // mekberg: update this
 	FlashlightUpdate( );
@@ -3862,7 +3869,7 @@ void idActor::PlayFromDeck()
 
 void idActor::PlayCard(Card card)
 {
-	card.Play(*this);
+	card.Play(this);
 }
 
 void idActor::GiveCard(Card card)
@@ -3870,8 +3877,13 @@ void idActor::GiveCard(Card card)
 	fullDeck.StackAdd(card);
 }
 
-void idActor::GiveCard(idStr cardId)
+void idActor::GiveCardString(idStr cardId)
 {
-	GiveCard(Card::GetCard(cardId));
+	GiveCard(Card(cardId));
+}
+
+void idActor::GiveCardString(const char *cardId)
+{
+	GiveCard(Card(cardId));
 }
 // RAVEN END

@@ -522,33 +522,6 @@
     <ClCompile Include="game\Cards\Card.cpp">
       <Filter>Game\Cards</Filter>
     </ClCompile>
-    <ClCompile Include="game\Cards\CardWeaponSwap.cpp">
-      <Filter>Game\Cards</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Cards\CardGrenade.cpp">
-      <Filter>Game\Cards</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Cards\CardImpulse.cpp">
-      <Filter>Game\Cards</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Cards\CardQuadDamage.cpp">
-      <Filter>Game\Cards</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Cards\CardSpeedBuff.cpp">
-      <Filter>Game\Cards</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Cards\CardHeal.cpp">
-      <Filter>Game\Cards</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Cards\CardAmmoUp.cpp">
-      <Filter>Game\Cards</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Cards\CardDash.cpp">
-      <Filter>Game\Cards</Filter>
-    </ClCompile>
-    <ClCompile Include="game\Cards\CardInvisibility.cpp">
-      <Filter>Game\Cards</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\Actor.h">

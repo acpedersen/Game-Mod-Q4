@@ -13,13 +13,13 @@ public:
 	virtual ~Card();
 
 
-	// save games
-	//void					Save(idSaveGame *savefile) const;					// archives object for save game file
-	//void					Restore(idRestoreGame *savefile);					// unarchives object from save game file
+	void					Play(idActor *act);
 
-	virtual void			Play(idActor act);
+	idStr					GetCardDefName();
+
 	bool					operator==(const Card card);
-	bool					CanPlay(idActor act);
+	bool					CanPlay(idActor *act);
+	static bool				IsCard(idStr cardName);
 
 
 	//Inline Functions
@@ -27,17 +27,29 @@ public:
 
 
 	//Static Functions
-	static Card				GetCard(idStr cardId);
-	
+	static idList<idStr>	GetStringsFromCards(idList<Card> list);
+	static idList<Card>		GetCardsFromStrings(idList<idStr> list);
 
 protected:
-	const idDeclEntityDef* cardDef;
+	idDict cardDef;
 	idStr cardName;
 	idStr displayName;
 	idStr descriptionText;
 
 	bool playerOnly = false;
 
+
+	void					PlayAmmoUp(idActor *act);
+	void					PlayDash(idActor *act);
+	void					PlayHaste(idActor *act);
+	void					PlayHeal(idActor *act);
+	void					PlayImpulse(idActor *act);
+	void					PlayInvisibility(idActor *act);
+	void					PlayQuadDamage(idActor *act);
+	void					PlayWeaponSwap(idActor *act);
+	void					PlayMegaJump(idActor *act);
+
+	void					PlaySpecific(idActor *act);
 };
 
 

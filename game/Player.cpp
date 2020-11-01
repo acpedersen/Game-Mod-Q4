@@ -1024,7 +1024,7 @@ idInventory::HasAmmo
 ===============
 */
 int idInventory::HasAmmo( int index, int amount ) {
-	if ( ( index == 0 ) || !amount ) {
+	if ( !amount ) {
 		// always allow weapons that don't use ammo to fire
 		return -1;
 	}
@@ -2054,6 +2054,8 @@ void idPlayer::Spawn( void ) {
 
 	itemCosts = static_cast< const idDeclEntityDef * >( declManager->FindType( DECL_ENTITYDEF, "ItemCostConstants", false ) );
 
+	inventory.handDrawTime = spawnArgs.GetInt("hand_draw_time", "20");
+
 	ResetDecks();
 }
 
@@ -2404,6 +2406,8 @@ void idPlayer::Restore( idRestoreGame *savefile ) {
  	savefile->ReadInt( nextHealthPulse );
  	savefile->ReadInt( nextArmorPulse );
  	savefile->ReadBool( hiddenWeapon );
+
+	
 
 	assert( !spectator );								// Don't save MP stuff
 
@@ -14081,7 +14085,7 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 }
 
 
-
+//Plays from player deck
 bool idPlayer::PlayRandomCardFromDeck()
 {
 	int cardIndex = rand() % inventory.deck->Num();
@@ -14093,12 +14097,18 @@ bool idPlayer::PlayRandomCardFromDeck()
 bool idPlayer::PlaySelectedCardFromHand()
 {
 	//Need to be able to select the card index somehow
-	Card card = (*inventory.hand)[inventory.selectedHandCard];
+	int index = inventory.selectedHandCard;
+	if (!(index >= 0 && index < inventory.hand->Num()))
+	{
+		return false;
+	}
+
+	Card card = (*inventory.hand)[index];
 	PlayCard(card);
 	inventory.hand->Remove(card);
 	inventory.discard->StackAdd(card);
 
-	if (inventory.selectedHandCard > 0)
+	if (index > 0)
 		inventory.selectedHandCard--;
 
 	UpdateHud();
@@ -14133,6 +14143,8 @@ void idInventory::ClearHand()
 
 void idInventory::DrawHand()
 {
+	ClearHand();
+
 	for (int i = 0; i < maxHandSize; i++)
 	{
 		DrawCard();
@@ -14154,7 +14166,7 @@ void idInventory::DrawCard()
 void idPlayer::UpdateHudCards()
 {
 	hud->SetStateInt("selected_card", inventory.selectedHandCard + 1);
-	hud->SetStateInt("draw_time", inventory.handDrawTime - (gameLocal.time - inventory.lastHandDraw));
+	hud->SetStateInt("draw_time", (inventory.handDrawTime - (gameLocal.time - inventory.lastHandDraw)/1000));
 
 	for (int i = 0; i < inventory.maxHandSize && i < inventory.hand->Num(); i++)
 	{
@@ -14181,6 +14193,13 @@ void idPlayer::PreviousSelectedCard()
 
 	UpdateHudCards();
 }
+void idPlayer::SelectCard(int index)
+{
+	if (index >= 0 && index < inventory.hand->Num())
+		inventory.selectedHandCard = index;
+
+	UpdateHudCards();
+}
 
 void idPlayer::ResetDecks(bool updateHud)
 {
@@ -14197,5 +14216,16 @@ void idPlayer::ResetDecks(bool updateHud)
 	if (updateHud)
 		UpdateHudCards();
 
+}
+
+void idPlayer::DrawHand()
+{
+	inventory.DrawHand();
+}
+
+void idPlayer::GiveCard(Card card)
+{
+	idActor::GiveCard(card);
+	inventory.deck->Insert(card, 0);
 }
 // RITUAL END

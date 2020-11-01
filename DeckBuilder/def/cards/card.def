@@ -15,14 +15,6 @@ entityDef card_weapon_swap
 	"player_only" "1"
 }
 
-entityDef card_grenade
-{
-	"displayname"	"Grenade"
-	"description_text"	"Throws a grenade."
-
-	"player_only" "1"
-}
-
 entityDef card_impulse
 {
 	"displayname"	"Impulse"
@@ -38,16 +30,16 @@ entityDef card_quad_damage
 	"description_text"	"Activates the Quad Damage buff for a set duration."
 
 	"player_only" "1"
-	"duration" "4"
+	"duration" "4f"
 }
 
-entityDef card_speed_buff
+entityDef card_haste
 {
 	"displayname"	"Speed Buff"
 	"description_text"	"Activates the speed buff for a set duration."
 
 	"player_only" "1"
-	"duration" "6"
+	"duration" "6f"
 }
 
 entityDef card_invisibility
@@ -56,7 +48,7 @@ entityDef card_invisibility
 	"description_text"	"Become invisible for a set amount of time."
 
 	"player_only" "1"
-	"duration" "7"
+	"duration" "7f"
 }
 
 entityDef card_heal
@@ -75,4 +67,13 @@ entityDef card_ammo_up
 
 	"player_only" "1"
 	"ammo_percentage" "1.0"
+}
+
+entityDef card_mega_jump
+{
+	"displayname"	"Mega Jump"
+	"description_text"	"A higher jump activates."
+
+	"player_only" "0"
+	"force" "5.0"
 }
