@@ -8,7 +8,7 @@ class Card : public idClass
 public:
 	CLASS_PROTOTYPE(Card);
 
-	Card() {};
+	Card():Card("card_heal") {};
 	Card(idStr cardName);
 	virtual ~Card();
 
@@ -20,10 +20,12 @@ public:
 	bool					operator==(const Card card);
 	bool					CanPlay(idActor *act);
 	static bool				IsCard(idStr cardName);
+	static idDict			GetDict(idStr cardName);
+	static const idDeclEntityDef	*GetDef(idStr cardName);
 
 
 	//Inline Functions
-	inline idStr			GetDisplayName() { return displayName; }
+	idStr					GetDisplayName();
 
 
 	//Static Functions

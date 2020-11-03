@@ -277,9 +277,10 @@ public:
 	int						handDrawTime;
 	int						selectedHandCard = 0;
 	int						maxHandSize = 3;
-	idList<Card>			*deck = new idList<Card>();
-	idList<Card>			*hand = new idList<Card>();
-	idList<Card>			*discard = new idList<Card>();
+	idStr					lastCardPlayed = "";
+	idList<Card*>			*deck = new idList<Card*>();
+	idList<Card*>			*hand = new idList<Card*>();
+	idList<Card*>			*discard = new idList<Card*>();
 };
 
 class idPlayer : public idActor {
@@ -811,17 +812,19 @@ public:
 	void					SetCash( float newCashAmount );
 	void					ResetCash();
 
-	bool					PlayRandomCardFromDeck();
-	bool					PlaySelectedCardFromHand();
 
+	bool					PlaySelectedCardFromHand();
 	void					DrawCard();
 	void					UpdateHudCards();
+	void					UpdateDrawTimer();
 	void					NextSelectedCard();
 	void					PreviousSelectedCard();
 	void					SelectCard(int index);
-	void					ResetDecks(bool updateHud = false);
+	void					ResetDecks();
 	void					DrawHand();
-	void					GiveCard(Card card);
+	void					GiveCard(Card *card);
+	idStr					LastCardPlayed();
+	static void				Append(idList<Card*> *appendee, idList<Card*> *object);
 // RITUAL END
 
 protected:

@@ -247,8 +247,8 @@ public:
 
 
 	void					PlayFromDeck();
-	void					PlayCard(Card card);
-	void					GiveCard(Card card);
+	virtual void			PlayCard(Card *card);
+	virtual void			GiveCard(Card *card);
 	void					GiveCardString(idStr cardId);
 	void					GiveCardString(const char *cardId);
 
@@ -268,7 +268,7 @@ public:
 	int						lightningEffects;
 
 protected:
-	idList<Card>			fullDeck;
+	idList<Card*>			*fullDeck = new idList<Card*>();
 	friend class			idAnimState;
 
 	float					fovDot;				// cos( fovDegrees )

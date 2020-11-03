@@ -3864,26 +3864,31 @@ void idActor::GuidedProjectileIncoming( idGuidedProjectile *projectile )
 
 void idActor::PlayFromDeck()
 {
-	PlayCard(fullDeck[rand() % fullDeck.Num()]);
+	if (fullDeck->Num() > 1)
+		PlayCard((*fullDeck)[rand() % fullDeck->Num()]);
+	else if (fullDeck->Num() == 1)
+		PlayCard((*fullDeck)[1]);
 }
 
-void idActor::PlayCard(Card card)
+void idActor::PlayCard(Card *card)
 {
-	card.Play(this);
+	if (card)
+		card->Play(this);
 }
 
-void idActor::GiveCard(Card card)
+void idActor::GiveCard(Card *card)
 {
-	fullDeck.StackAdd(card);
+	fullDeck->StackAdd(card);
 }
 
 void idActor::GiveCardString(idStr cardId)
 {
-	GiveCard(Card(cardId));
+	GiveCardString(cardId.c_str());
 }
 
 void idActor::GiveCardString(const char *cardId)
 {
-	GiveCard(Card(cardId));
+	Card *card = new Card(cardId);
+	this->GiveCard(card);
 }
 // RAVEN END

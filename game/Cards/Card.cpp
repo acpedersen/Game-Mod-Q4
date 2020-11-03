@@ -13,10 +13,15 @@ END_CLASS
 Card::Card(idStr cardName)
 {
 	if (!IsCard(cardName))
+	{
+		gameLocal.Error("%s is not a cardName.", cardName.c_str());
 		return;
+	}
 
 	this->cardName = cardName;
-	cardDef = gameLocal.FindEntityDef(cardName, false)->dict;
+	cardDef = GetDict(cardName);
+
+	displayName = cardDef.GetString("displayname", "");
 	descriptionText = cardDef.GetString("description_text", "");
 	playerOnly = cardDef.GetBool("player_only");
 }
@@ -60,7 +65,7 @@ void Card::PlayHaste(idActor *act)
 	float duration = cardDef.GetFloat("duration", "10f");
 	
 	bool succeed = gameLocal.GetLocalPlayer()->GivePowerUp(POWERUP_HASTE, SEC2MS(duration));
-	gameLocal.Printf("Give haste succeeded: %s\n", succeed);
+	gameLocal.Printf("Give haste succeeded: %s\n", "" + succeed);
 }
 
 void Card::PlayHeal(idActor *act)
@@ -127,11 +132,15 @@ void Card::PlaySpecific(idActor *act)
 	{
 		PlayQuadDamage(act);
 	}
-	else if (idStr::Icmp(cardName, "card_weapon_swap") == 0)
+	else if (idStr::Cmpn(cardName, "card_weapon", 11) == 0)
 	{
 		PlayWeaponSwap(act);
 	}
 	else if (idStr::Icmp(cardName, "card_mega_jump") == 0)
+	{
+		PlayMegaJump(act);
+	}
+	else if (idStr::Icmp(cardName, "card_infinite_ammo") == 0)
 	{
 		PlayMegaJump(act);
 	}
@@ -142,8 +151,20 @@ idStr Card::GetCardDefName()
 	return cardName;
 }
 
+idStr Card::GetDisplayName()
+{
+	if (cardName && idStr::Cmpn(cardName, "card_weapon", 11) == 0)
+	{
+		return displayName + cardName.Right(11);
+	}
+	return displayName;
+}
+
 bool Card::CanPlay(idActor *act)
 {
+	if (!cardName) //Null card
+		return false;
+
 	bool notBlank = cardName != "";
 	bool playerCheck = !playerOnly || gameLocal.GetLocalPlayer()->GetInstance() == act->GetInstance();
 
@@ -152,7 +173,27 @@ bool Card::CanPlay(idActor *act)
 
 bool Card::IsCard(idStr cardName)
 {
-	const idDeclEntityDef *cardDef = gameLocal.FindEntityDef(cardName, false);
+	const idDeclEntityDef *cardDef = GetDef(cardName);
+	return cardDef;
+}
+
+idDict Card::GetDict(idStr cardName)
+{
+	return GetDef(cardName)->dict;
+}
+
+const idDeclEntityDef *Card::GetDef(idStr cardName)
+{
+	const idDeclEntityDef *cardDef;
+	if (idStr::Cmpn(cardName, "card_weapon", 11) == 0)
+	{
+		cardDef = gameLocal.FindEntityDef("card_weapon", false);
+	}
+	else
+	{
+		cardDef = gameLocal.FindEntityDef(cardName, false);
+	}
+
 	return cardDef;
 }
 

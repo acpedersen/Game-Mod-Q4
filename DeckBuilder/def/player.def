@@ -809,6 +809,7 @@ entityDef player_marine
 	"def_playerView"					"playerView_marine"
 
 	"hand_draw_time"					"20"
+	"starting_deck"						"3,card_weapon_weapon_blaster;2,card_dash;1,card_heal"
 }
 
 entityDef player_strogg

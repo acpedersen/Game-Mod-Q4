@@ -7,10 +7,10 @@ entityDef card_dash
 	"impulse" "5"
 }
 
-entityDef card_weapon_swap
+entityDef card_weapon
 {
-	"displayname"	"Weapon Swap"
-	"description_text"	"Swaps to a weapon."
+	"displayname"	"Weapon Swap "
+	"description_text"	"Swaps to weapon "
 
 	"player_only" "1"
 }
@@ -35,7 +35,7 @@ entityDef card_quad_damage
 
 entityDef card_haste
 {
-	"displayname"	"Speed Buff"
+	"displayname"	"Haste"
 	"description_text"	"Activates the speed buff for a set duration."
 
 	"player_only" "1"
@@ -53,7 +53,7 @@ entityDef card_invisibility
 
 entityDef card_heal
 {
-	"displayname"	"Dash"
+	"displayname"	"Heal"
 	"description_text"	"Heals the player for a set amount of health."
 
 	"player_only" "1"
